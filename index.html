@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>墨爾本自由活動 4 天</title>
+<style>
+:root{
+  --bg:#fff;--bg2:#f5f4f0;--bg3:#eceae4;--text:#111;--text2:#666;--text3:#aaa;
+  --border:rgba(0,0,0,0.1);--border2:rgba(0,0,0,0.2);
+  --blue:#185FA5;--bbg:#E6F1FB;
+  --green:#3B6D11;--gbg:#EAF3DE;
+  --amber:#854F0B;--abg:#FAEEDA;
+  --red:#993C1D;--rbg:#FAECE7;
+  --purple:#534AB7;--pbg:#EEEDFE;
+  --pink:#993556;--pkbg:#FBEAF0;
+  --teal:#0F6E56;--tbg:#E1F5EE;
+  --gray:#5F5E5A;--grbg:#F1EFE8;
+  --r:10px;--rs:6px;
+}
+@media(prefers-color-scheme:dark){:root{
+  --bg:#1c1c1e;--bg2:#2c2c2e;--bg3:#3a3a3c;--text:#f2f2f7;--text2:#aeaeb2;--text3:#636366;
+  --border:rgba(255,255,255,0.09);--border2:rgba(255,255,255,0.18);
+}}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;background:var(--bg3);color:var(--text);min-height:100vh;padding:20px}
+.wrap{max-width:960px;margin:0 auto}
+.card{background:var(--bg);border-radius:16px;padding:22px 20px;margin-bottom:14px}
+h1{font-size:24px;font-weight:600;margin-bottom:5px}
+.badges{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px}
+.badge{font-size:12px;font-weight:500;padding:3px 10px;border-radius:20px}
+.sub{font-size:14px;color:var(--text2);margin-bottom:14px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap}
+.tab{font-size:13px;font-weight:500;padding:7px 15px;border-radius:20px;border:1px solid var(--border2);background:var(--bg);color:var(--text2);cursor:pointer;transition:all .15s}
+.tab:hover{background:var(--bg2)}
+.tab.on{background:#0C447C;color:#E6F1FB;border-color:#0C447C}
+.panel{display:none}
+.panel.show{display:block}
+
+.dhead{background:var(--bg2);border-radius:var(--r);padding:11px 13px;margin-bottom:10px;border:1px solid var(--border)}
+.ddate{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin-bottom:1px}
+.dtitle{font-size:15px;font-weight:600;color:var(--text);margin-bottom:2px}
+.dsub{font-size:12px;color:var(--text2)}
+.dpills{display:flex;gap:4px;flex-wrap:wrap;margin-top:6px}
+.pill{font-size:10px;font-weight:500;padding:2px 7px;border-radius:20px}
+
+.map-card{background:var(--bg);border-radius:var(--r);border:1px solid var(--border);margin-bottom:10px;overflow:hidden}
+.map-title{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--text3);padding:8px 12px 4px}
+.map-wrap{padding:0 8px 10px;overflow-x:auto;display:flex;justify-content:center}
+
+.stops{display:flex;flex-direction:column;gap:10px}
+.sc{background:var(--bg);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;text-decoration:none;color:inherit;display:block;user-select:text;box-shadow:0 1px 3px rgba(0,0,0,.05);pointer-events:none}
+.sc:hover{border-color:var(--border2)}
+.sh{display:flex;align-items:flex-start;gap:10px;padding:13px 14px;pointer-events:all}
+.snum{width:25px;height:25px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;flex-shrink:0;margin-top:1px}
+.sb{flex:1}
+.st{font-size:12px;color:var(--text3);margin-bottom:2px}
+.sname{font-size:15px;font-weight:600;color:var(--text);margin-bottom:4px;line-height:1.35}
+.sd{font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:5px}
+.stags{display:flex;gap:5px;flex-wrap:wrap}
+.t{font-size:11px;font-weight:500;padding:2px 7px;border-radius:20px}
+.nav-arrow{display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:500;padding:4px 10px;border-radius:20px;border:1px solid var(--border2);background:var(--bg);color:var(--blue) !important;text-decoration:none;cursor:pointer;transition:background .15s;white-space:nowrap;flex-shrink:0;margin-top:2px;pointer-events:all}
+.nav-arrow:hover{background:var(--bbg)}
+.trow{display:flex;align-items:center;gap:5px;padding:7px 14px;border-top:1px solid var(--border);background:var(--bg2);font-size:12px;color:var(--text2);pointer-events:all}
+
+.tdiv{display:flex;align-items:center;gap:8px;margin:6px 0 2px;padding:0 2px}
+.tdiv-line{flex:1;height:1px;background:var(--border)}
+.tdiv-label{font-size:10px;color:var(--text3);white-space:nowrap;font-weight:500;letter-spacing:.04em}
+
+.abox{background:var(--gbg);border-left:2.5px solid var(--green);border-radius:0 var(--rs) var(--rs) 0;padding:7px 11px;margin-bottom:9px;font-size:12px;color:var(--green);line-height:1.55}
+.wbox{background:var(--rbg);border-left:2.5px solid var(--red);border-radius:0 var(--rs) var(--rs) 0;padding:7px 11px;margin-bottom:9px;font-size:12px;color:var(--red);line-height:1.55}
+.note{font-size:11px;color:var(--text3);margin-top:0;line-height:1.6}
+
+/* Lists */
+.list-header{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.list-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.list-title{font-size:16px;font-weight:600;color:var(--text);margin-bottom:2px}
+.list-sub{font-size:12px;color:var(--text2)}
+.list-group-label{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin:14px 0 6px;padding:0 2px}
+.list-group-label:first-of-type{margin-top:0}
+.list-item{display:flex;align-items:flex-start;gap:10px;padding:10px 4px 10px 0;border-bottom:1px solid var(--border);text-decoration:none;color:inherit;transition:opacity .15s}
+.list-item:hover{opacity:.75}
+.list-item:last-child{border-bottom:none}
+.li-left{padding-top:4px;flex-shrink:0}
+.li-dot{width:8px;height:8px;border-radius:50%}
+.li-body{flex:1;min-width:0}
+.li-en{font-size:14px;font-weight:600;color:var(--text);margin-bottom:3px}
+.li-zh{font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:5px}
+.li-meta{display:flex;gap:4px;flex-wrap:wrap}
+.li-badge{font-size:10px;font-weight:500;padding:2px 6px;border-radius:20px}
+.li-plan{font-size:10px;font-weight:600;padding:2px 7px;border-radius:20px}
+.li-planned{background:var(--gbg);color:var(--green)}
+.li-unplanned{background:var(--bg2);color:var(--text3)}
+.li-day{font-size:11px;color:var(--text3);white-space:nowrap;flex-shrink:0;padding-top:2px;min-width:36px;text-align:right}
+.li-nav{font-size:12px;color:var(--text3);flex-shrink:0;padding-top:2px;margin-left:4px}
+
+/* Checklist */
+.checklist{background:var(--bg2);border-radius:var(--r);border:1px solid var(--border);padding:12px 14px;margin-bottom:10px}
+.cl-title{font-size:12px;font-weight:600;color:var(--text2);margin-bottom:8px}
+.cl-row{display:flex;align-items:center;gap:8px;padding:4px 0;border-bottom:1px solid var(--border)}
+.cl-row:last-child{border-bottom:none}
+.cl-check{font-size:12px;flex-shrink:0}
+.cl-name{font-size:12px;color:var(--text);flex:1}
+.cl-day{font-size:11px;color:var(--text3)}
+.cl-no{font-size:11px;color:var(--red)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- Header -->
+<div class="card">
+  <h1>墨爾本自由活動 4 天</h1>
+  <div class="badges">
+    <span class="badge" style="background:var(--bbg);color:var(--blue)">Holiday Inn Southbank</span>
+    <span class="badge" style="background:var(--gbg);color:var(--green)">飯店含早餐</span>
+    <span class="badge" style="background:var(--gbg);color:var(--green)">電車免費至 5/31</span>
+  </div>
+  <div class="sub">2026 公司旅遊 ▪︎ 不負責任安排 😆 ▪︎ 自由行每日出發時間 9:00 - 9:30 ▪︎ 佛系餐費</div>
+  <div class="tabs">
+    <button class="tab on" onclick="sw(0,this)">🏛 景點</button>
+    <button class="tab" onclick="sw(1,this)">🍽 食物</button>
+    <button class="tab" onclick="sw(2,this)">5/08 五</button>
+    <button class="tab" onclick="sw(3,this)">5/09 六</button>
+    <button class="tab" onclick="sw(4,this)">5/10 日</button>
+    <button class="tab" onclick="sw(5,this)">5/12 二</button>
+  </div>
+</div>
+
+<!-- ===================== SPOTS LIST ===================== -->
+<div class="panel show" id="d0">
+<div class="card">
+  <div class="list-header">
+    <div class="list-icon" style="background:var(--bbg);color:var(--blue)">🏛</div>
+    <div><div class="list-title">景點清單</div><div class="list-sub">點擊任一項目開啟 Google Maps</div></div>
+  </div>
+  <div class="list-group-label">文化 &amp; 建築</div>
+  <a class="list-item" href="https://maps.google.com/?q=State+Library+Victoria+328+Swanston+St+Melbourne" target="_blank" onclick="jumpTo(\'d2\')">
+    <div class="li-left"><div class="li-dot" style="background:var(--purple)"></div></div>
+    <div class="li-body"><div class="li-en">State Library Victoria</div><div class="li-zh">州立圖書館：維多利亞州立圖書館，壯觀的八角形閱覽室 La Trobe Reading Room，是必拍地標。</div></div>
+    <div class="li-day">5/08 五</div><div class="li-nav">↗</div>
+  </a>
+  <a class="list-item" href="https://maps.google.com/?q=Flinders+Street+Station+Melbourne" target="_blank" onclick="jumpTo(\'d4\')">
+    <div class="li-left"><div class="li-dot" style="background:var(--blue)"></div></div>
+    <div class="li-body"><div class="li-en">Flinders Street Station</div><div class="li-zh">弗林德斯街車站：墨爾本最著名的地標火車站，黃色建築與時鐘牆是這座城市的象徵。</div></div>
+    <div class="li-day">5/10 日</div><div class="li-nav">↗</div>
+  </a>
+  <a class="list-item" href="https://maps.google.com/?q=Old+Melbourne+Gaol,377+Russell+St+Melbourne" target="_blank" onclick="jumpTo(\'d3\')">
+    <div class="li-left"><div class="li-dot" style="background:var(--purple)"></div></div>
+    <div class="li-body"><div class="li-en">Old Melbourne Gaol</div><div class="li-zh">舊墨爾本監獄：歷史悠久的監獄，曾關押傳奇大盜 Ned Kelly，可體驗被「逮捕」入獄的導覽。</div></div>
+    <div class="li-day">5/09 六</div><div class="li-nav">↗</div>
+  </a>
+  <a class="list-item" href="https://maps.google.com/?q=National+Gallery+of+Victoria,180+St+Kilda+Rd+Melbourne" target="_blank" onclick="jumpTo(\'d4\')">
+    <div class="li-left"><div class="li-dot" style="background:var(--purple)"></div></div>
+    <div class="li-body"><div class="li-en">National Gallery of Victoria (NGV)</div><div class="li-zh">維多利亞國立美術館：澳洲最古老、參觀人數最多的美術館，天花板彩色玻璃鑲嵌藝術是視覺焦點。</div></div>
+    <div class="li-day">5/10 日</div><div class="li-nav">↗</div>
+  </a>
+  <a class="list-item" href="https://maps.google.com/?q=St+Patrick+Cathedral,1+Cathedral+Pl+East+Melbourne" target="_blank" onclick="jumpTo(\'d3\')">
+    <div class="li-left"><div class="li-dot" style="background:var(--blue)"></div></div>
+    <div class="li-body"><div class="li-en">St Patrick's Cathedral</div><div class="li-zh">聖派翠克大教堂：宏偉的哥德式建築，內部彩色玻璃窗非常美麗且莊嚴，Jay Chou、五月天 MV 取景地。</div></div>
+    <div class="li-day">5/09 六</div><div class="li-nav">↗</div>
+  </a>
+  <a class="list-item" href="https://maps.google.com/?q=Melbourne+Museum,11+Nicholson+St+Carlton" target="_blank" onclick="jumpTo(\'d3\')">
+    <div class="li-left"><div class="li-dot" style="background:var(--blue)"></div></div>
+    <div class="li-body"><div class="li-en">Melbourne Museum</div><div class="li-zh">墨爾本博物館：位於皇家展覽館旁，展示自然歷史與原住民文化，戶外花園也非常適合散步。每天 9am–5pm。</div></div>
+    <div class="li-day">5/09 六</div><div class="li-nav">↗</div>
+  </a>
+  <a class="list-item" href="https://maps.google.com/?q=Melbourne+Central+Cnr+LaTrobe+Swanston+Melbourne" target="_blank" onclick="jumpTo(\'d2\')">
+    <div class="li-left"><div class="li-dot" style="background:var(--amber)"></div></div>
+    <div class="li-body"><div class="li-en">Melbourne Central</div><div class="li-zh">墨爾本中央購物中心：結合購物中心與古蹟「子彈工廠」的複合空間，整點會有掛鐘表演。</div></div>
+    <div class="li-day">5/08 五</div><div class="li-nav">↗</div>
+  </a>
+
+  <div class="list-group-label">市集 &amp; 購物</div>
+  <a class="list-item" href="https://maps.google.com/?q=Queen+Victoria+Market+Melbourne" target="_blank" onclick="jumpTo(\'d2\')">
+    <div class="li-left"><div class="li-dot" style="background:var(--amber)"></div></div>
+    <div class="li-body"><div class="li-en">Queen Victoria Market</div><div class="li-zh">維多利亞女王市場：墨爾本規模最大的露天市集，必吃甜甜圈、買伴手禮、逛夜市（季節性）。</div></div>
+    <div class="li-day">5/08 五</div><div class="li-nav">↗</div>
+  </a>
+  <a class="list-item" href="https://maps.google.com/?q=South+Melbourne+Market,322+Coventry+St+South+Melbourne" target="_blank" onclick="jumpTo(\'d4\')">
+    <div class="li-left"><div class="li-dot" style="background:var(--amber)"></div></div>
+    <div class="li-body"><div class="li-en">South Melbourne Market</div><div class="li-zh">南墨爾本市場：規模較小但更精緻，必吃「Dim Sim（炸點心）」和超新鮮的生蠔。</div></div>
+    <div class="li-day">5/10 日</div><div class="li-nav">↗</div>
+  </a>
+  <a class="list-item" href="https://maps.google.com/?q=DFO+South+Wharf,20+Convention+Centre+Pl+South+Wharf" target="_blank" onclick="jumpTo(\'d5\')">
+    <div class="li-left"><div class="li-dot" style="background:var(--amber)"></div></div>
+    <div class="li-body"><div class="li-en">DFO South Wharf</div><div class="li-zh">南碼頭直銷商場：墨爾本市區最大的名牌折扣中心，想買運動品牌、休閒服飾必去。</div></div>
+    <div class="li-day">5/12 二</div><div class="li-nav">↗</div>
+  </a>
+  <a class="list-item" href="https://maps.google.com/?q=Essensorie+Block+Arcade+282+Collins+St+Melbourne" target="_blank" onclick="jumpTo(\'d4\')">
+    <div class="li-left"><div class="li-dot" style="background:var(--amber)"></div></div>
+    <div class="li-body"><div class="li-en">Essensorie</div><div class="li-zh">香氛精油店：位於 Block Arcade 內的精油香氛店，產品非常有質感，是高品質伴手禮首選。</div></div>
+    <div class="li-day">5/10 日</div><div class="li-nav">↗</div>
+  </a>
+
+  <div class="list-group-label">娛樂 &amp; 夜間</div>
+  <a class="list-item" href="https://maps.google.com/?q=Crown+Casino+Melbourne,8+Whiteman+St+Southbank" target="_blank" onclick="jumpTo(\'d4\')">
+    <div class="li-left"><div class="li-dot" style="background:var(--pink)"></div></div>
+    <div class="li-body"><div class="li-en">Crown Casino &amp; Entertainment Complex</div><div class="li-zh">皇冠賭場娛樂城：每晚 9pm 起整點免費噴火秀，場面壯觀。24 小時開放，離飯店步行 5 分鐘。</div></div>
+    <div class="li-day">5/10 日</div><div class="li-nav">↗</div>
+  </a>
+  <a class="list-item" href="https://maps.google.com/?q=Smith+Street+Fitzroy+Melbourne" target="_blank" onclick="jumpTo(\'d2\')">
+    <div class="li-left"><div class="li-dot" style="background:var(--pink)"></div></div>
+    <div class="li-body"><div class="li-en">Fitzroy — Smith Street</div><div class="li-zh">費茲羅伊文青街：墨爾本最有個性的街區，獨立設計師店、二手衣、咖啡館和塗鴉牆密集。</div></div>
+    <div class="li-day">5/08 五</div><div class="li-nav">↗</div>
+  </a>
+</div>
+</div>
+
+<!-- ===================== FOOD LIST ===================== -->
+<div class="panel" id="d1">
+<div class="card">
+  <div class="list-header">
+    <div class="list-icon" style="background:var(--rbg);color:var(--red)">🍽</div>
+    <div><div class="list-title">食物清單</div><div class="list-sub">點擊任一項目開啟 Google Maps</div></div>
+  </div>
+
+  <div class="list-group-label">餐廳 &amp; 咖啡館</div>
+  <a class="list-item" href="https://maps.google.com/?q=Higher+Ground+Melbourne,650+Little+Bourke+St" target="_blank" onclick="jumpTo(\'d3\')">
+    <div class="li-left"><div class="li-dot" style="background:var(--red)"></div></div>
+    <div class="li-body">
+      <div class="li-en">Higher Ground</div>
+      <div class="li-zh">由發電廠改建的高挑咖啡館，推薦「厚鬆餅（Hotcake）」，空間感極強。位於 Southern Cross Station 旁，不在主要動線上。週日 7:30am–5pm。</div>
+      <div class="li-meta">
+        <span class="li-badge" style="background:var(--grbg);color:var(--gray)">AUD 25–35/人</span>
+        <span class="li-badge" style="background:var(--rbg);color:var(--red)">建議訂位</span>
+        <span class="li-plan">— 未排入（Southern Cross 附近，可視當天狀況決定）</span>
+      </div>
+    </div>
+    <div class="li-nav">↗</div>
+  </a>
+  <a class="list-item" href="https://maps.google.com/?q=Manchester+Press,8+Rankins+Lane+Melbourne" target="_blank" onclick="jumpTo(\'d3\')">
+    <div class="li-left"><div class="li-dot" style="background:var(--red)"></div></div>
+    <div class="li-body">
+      <div class="li-en">Manchester Press</div>
+      <div class="li-zh">隱身巷弄的貝果名店，氣氛非常「墨爾本」，拉花技術也是一絕。</div>
+      <div class="li-meta">
+        <span class="li-badge" style="background:var(--grbg);color:var(--gray)">AUD 15–20/人</span>
+        <span class="li-plan li-planned">✓ 已排入 5/09 午餐</span>
+      </div>
+    </div>
+    <div class="li-nav">↗</div>
+  </a>
+  <a class="list-item" href="https://maps.google.com/?q=Tiamo+303+Lygon+St+Carlton+Melbourne" target="_blank" onclick="jumpTo(\'d3\')">
+    <div class="li-left"><div class="li-dot" style="background:var(--red)"></div></div>
+    <div class="li-body">
+      <div class="li-en">Tiamo — Lygon Street（代替 Sofia）</div>
+      <div class="li-zh">Lygon Street 最具代表性的義大利餐廳，以「超大份量」聞名，炸物拼盤和冰淇淋多到令人驚訝，高 CP 值首選。在 Melbourne Museum 步行 5 分鐘。</div>
+      <div class="li-meta">
+        <span class="li-badge" style="background:var(--grbg);color:var(--gray)">AUD 25–40/人</span>
+        <span class="li-badge" style="background:var(--rbg);color:var(--red)">建議訂位</span>
+        <span class="li-plan li-planned">✓ 已排入 5/09 晚餐</span>
+      </div>
+    </div>
+    <div class="li-nav">↗</div>
+  </a>
+
+  <div class="list-group-label">街區美食</div>
+  <a class="list-item" href="https://maps.google.com/?q=Lygon+Street+Carlton+Melbourne+Italian" target="_blank" onclick="jumpTo(\'d3\')">
+    <div class="li-left"><div class="li-dot" style="background:var(--amber)"></div></div>
+    <div class="li-body">
+      <div class="li-en">Lygon Street（義大利街）</div>
+      <div class="li-zh">墨爾本的義大利文化中心，充滿披薩店與 Gelato 冰淇淋店，是 Carlton 區的靈魂街道。</div>
+      <div class="li-meta">
+        <span class="li-plan li-planned">✓ 已排入 5/09 晚餐</span>
+      </div>
+    </div>
+    <div class="li-nav">↗</div>
+  </a>
+  <a class="list-item" href="https://maps.google.com/?q=The+Real+Greek+Souvlaki+Bar+315+Brunswick+St+Fitzroy" target="_blank" onclick="jumpTo(\'d2\')">
+    <div class="li-left"><div class="li-dot" style="background:var(--amber)"></div></div>
+    <div class="li-body">
+      <div class="li-en">希臘捲餅 Souvlaki（The Real Greek Souvlaki Bar）</div>
+      <div class="li-zh">墨爾本有大量希臘移民，Souvlaki（烤肉捲餅）是必吃道地美食。315 Brunswick St Fitzroy，就在 Day 7 逛街區域內，早上逛 Fitzroy 時順路吃。</div>
+      <div class="li-meta">
+        <span class="li-badge" style="background:var(--grbg);color:var(--gray)">AUD 15–25/人</span>
+        <span class="li-plan li-planned">✓ 已排入 5/08 午餐</span>
+      </div>
+    </div>
+    <div class="li-nav">↗</div>
+  </a>
+
+  <div class="list-group-label">市集必吃 &amp; 甜點</div>
+  <a class="list-item" href="https://maps.google.com/?q=South+Melbourne+Dim+Sim+South+Melbourne+Market" target="_blank">
+    <div class="li-left"><div class="li-dot" style="background:var(--amber)"></div></div>
+    <div class="li-body">
+      <div class="li-en">South Melbourne Dim Sim（炸點心）</div>
+      <div class="li-zh">1949 年發明的澳式大水餃，South Melbourne Market 的招牌名物，炸或蒸都超好吃。</div>
+      <div class="li-meta">
+        <span class="li-badge" style="background:var(--gbg);color:var(--green)">AUD 2–3/顆</span>
+        <span class="li-plan li-planned">✓ 已排入 5/10 早上</span>
+      </div>
+    </div>
+    <div class="li-nav">↗</div>
+  </a>
+  <a class="list-item" href="https://maps.google.com/?q=moon+cruller+ice+cream+melbourne+QVM" target="_blank">
+    <div class="li-left"><div class="li-dot" style="background:var(--amber)"></div></div>
+    <div class="li-body">
+      <div class="li-en">Moon Ice Cream / Moon Cruller（月亮冰淇淋）</div>
+      <div class="li-zh">墨爾本特有的造型甜甜圈冰淇淋，幾乎只在當地才有。超市可買到，也可 Google 搜尋附近門市。</div>
+      <div class="li-meta">
+        <span class="li-badge" style="background:var(--grbg);color:var(--gray)">AUD 8–12</span>
+        <span class="li-plan li-planned">✓ 已排入 5/08 Coles 買</span>
+      </div>
+    </div>
+    <div class="li-nav">↗</div>
+  </a>
+  <a class="list-item" href="https://maps.google.com/?q=Koko+Black+Royal+Arcade+335+Bourke+St+Melbourne" target="_blank" onclick="jumpTo(\'d4\')">
+    <div class="li-left"><div class="li-dot" style="background:var(--amber)"></div></div>
+    <div class="li-body">
+      <div class="li-en">Koko Black（澳洲頂級手工巧克力）</div>
+      <div class="li-zh">澳洲頂級手工巧克力店，推薦熱巧克力或買松露巧克力當伴手禮。Royal Arcade 內，Essensorie 步行 3 分鐘。</div>
+      <div class="li-meta">
+        <span class="li-badge" style="background:var(--grbg);color:var(--gray)">伴手禮推薦</span>
+        <span class="li-plan li-planned">✓ 已排入 5/10 午後</span>
+      </div>
+    </div>
+    <div class="li-nav">↗</div>
+  </a>
+  <a class="list-item" href="https://maps.google.com/?q=Gossips+Sweet+Lips+Melbourne+Flinders+Lane" target="_blank" onclick="jumpTo(\'d3\')">
+    <div class="li-left"><div class="li-dot" style="background:var(--amber)"></div></div>
+    <div class="li-body">
+      <div class="li-en">Gossips Sweet Lips</div>
+      <div class="li-zh">墨爾本特色飲品甜點店，Flinders Lane 附近，Manchester Press 午餐後順路去。</div>
+      <div class="li-meta">
+        <span class="li-plan li-planned">✓ 已排入 5/09 午餐後</span>
+      </div>
+    </div>
+    <div class="li-nav">↗</div>
+  </a>
+
+  <div class="list-group-label">飲料</div>
+  <a class="list-item" href="https://maps.google.com/?q=Boost+Juice+Melbourne+Central" target="_blank" onclick="jumpTo(\'d3\')">
+    <div class="li-left"><div class="li-dot" style="background:var(--green)"></div></div>
+    <div class="li-body">
+      <div class="li-en">Boost Juice</div>
+      <div class="li-zh">澳洲連鎖現打果汁，推薦「All Berry Bang」，清爽健康，到處都有分店。Melbourne Central 等大型商場內都有。</div>
+      <div class="li-meta">
+        <span class="li-badge" style="background:var(--grbg);color:var(--gray)">AUD 8–12</span>
+        <span class="li-plan li-planned">✓ 已排入 5/09</span>
+      </div>
+    </div>
+    <div class="li-nav">↗</div>
+  </a>
+  <a class="list-item" href="https://maps.google.com/?q=Dan+Murphy%27s+Melbourne+Southbank" target="_blank">
+    <div class="li-left"><div class="li-dot" style="background:var(--green)"></div></div>
+    <div class="li-body">
+      <div class="li-en">Strongbow Apple Cider / Gossips Sweet Lips White Wine</div>
+      <div class="li-zh">Strongbow 為蘋果酒（Cider），Gossips Sweet Lips 為平價甜白酒，超市與酒專皆有。在 Dan Murphy's 超市買最便宜划算。</div>
+      <div class="li-meta">
+        <span class="li-badge" style="background:var(--gbg);color:var(--green)">超市購買最省</span>
+        <span class="li-plan li-planned">✓ 隨時可買</span>
+      </div>
+    </div>
+    <div class="li-nav">↗</div>
+  </a>
+</div>
+</div>
+
+<!-- ===================== DAY 5/08 ===================== -->
+<div class="panel show" id="d2">
+<div class="card" style="padding-bottom:14px">
+  <div class="dhead">
+    <div class="ddate">Day 5 · 2026/05/08 週五</div>
+    <div class="dtitle">QVM + Fitzroy + 彩虹小屋 + Souvlaki + Melbourne Central + 圖書館 + Southbank 晚餐</div>
+    <div class="dsub">Swanston St 北軸一條線，由北往南，電車全程免費</div>
+    <div class="dpills">
+      <span class="pill" style="background:var(--gbg);color:var(--green)">飯店早餐吃飽再出發</span>
+      <span class="pill" style="background:var(--bbg);color:var(--blue)">電車免費</span>
+    </div>
+  </div>
+  <div class="map-card">
+    <div class="map-title">今日動線示意圖（北 → 南）</div>
+    <div class="map-wrap">
+    <svg viewBox="0 0 560 340" width="560" height="340" xmlns="http://www.w3.org/2000/svg" style="display:block">
+      <defs><marker id="a08" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#185FA5" opacity=".7"/></marker></defs>
+      <line x1="0" y1="30"  x2="560" y2="30"  stroke="#e0ddd8" stroke-width="5"/>
+      <line x1="0" y1="75"  x2="560" y2="75"  stroke="#e0ddd8" stroke-width="5"/>
+      <line x1="0" y1="130" x2="560" y2="130" stroke="#e0ddd8" stroke-width="7"/>
+      <line x1="0" y1="185" x2="560" y2="185" stroke="#e0ddd8" stroke-width="9"/>
+      <line x1="0" y1="240" x2="560" y2="240" stroke="#e0ddd8" stroke-width="7"/>
+      <line x1="0" y1="295" x2="560" y2="295" stroke="#e0ddd8" stroke-width="9"/>
+      <line x1="180" y1="0" x2="180" y2="340" stroke="#e0ddd8" stroke-width="8"/>
+      <path d="M0,253 Q200,246 420,250 Q500,253 560,249" stroke="#a8d8f0" stroke-width="8" fill="none" opacity=".6"/>
+      <text x="280" y="267" font-size="9" fill="#7ab8d8" text-anchor="middle">Yarra River</text>
+      <text x="180" y="12" font-size="9" fill="#bbb" text-anchor="middle">Swanston St</text>
+      <text x="6" y="28"  font-size="9" fill="#bbb">Fitzroy</text>
+      <text x="6" y="73"  font-size="9" fill="#bbb">La Trobe</text>
+      <text x="6" y="128" font-size="9" fill="#bbb">Bourke</text>
+      <text x="6" y="183" font-size="9" fill="#bbb">Collins</text>
+      <text x="6" y="238" font-size="9" fill="#bbb">Flinders</text>
+      <text x="6" y="293" font-size="9" fill="#bbb">Southbank</text>
+      <!-- Hotel -->
+      <circle cx="130" cy="295" r="10" fill="#854F0B"/>
+      <text x="130" y="295" font-size="9" font-weight="600" fill="#fff" text-anchor="middle" dominant-baseline="central">H</text>
+      <text x="116" y="307" font-size="9" fill="#854F0B" text-anchor="end">飯店</text>
+      <!-- Route -->
+      <polyline points="180,30 180,75 180,130 180,185 180,240 100,295 130,295" stroke="#185FA5" stroke-width="2.2" fill="none" stroke-dasharray="5,3" opacity=".75" marker-end="url(#a08)"/>
+      <!-- Nodes -->
+      <circle cx="180" cy="30" r="9" fill="#185FA5"/>
+      <text x="180" y="30" font-size="9" font-weight="600" fill="#fff" text-anchor="middle" dominant-baseline="central">1</text>
+      <text x="195" y="26" font-size="9" fill="#185FA5">QVM</text>
+      <circle cx="180" cy="53" r="9" fill="#185FA5"/>
+      <text x="180" y="53" font-size="9" font-weight="600" fill="#fff" text-anchor="middle" dominant-baseline="central">2</text>
+      <text x="195" y="49" font-size="9" fill="#185FA5">Fitzroy 文青街</text>
+      <circle cx="180" cy="75" r="9" fill="#185FA5"/>
+      <text x="180" y="75" font-size="9" font-weight="600" fill="#fff" text-anchor="middle" dominant-baseline="central">3</text>
+      <text x="165" y="68" font-size="9" fill="#185FA5" text-anchor="end">彩虹小屋</text>
+      <circle cx="180" cy="100" r="9" fill="#185FA5"/>
+      <text x="180" y="100" font-size="9" font-weight="600" fill="#fff" text-anchor="middle" dominant-baseline="central">4</text>
+      <text x="165" y="93" font-size="9" fill="#185FA5" text-anchor="end">Souvlaki 午餐</text>
+      <circle cx="180" cy="130" r="9" fill="#185FA5"/>
+      <text x="180" y="130" font-size="9" font-weight="600" fill="#fff" text-anchor="middle" dominant-baseline="central">5</text>
+      <text x="165" y="123" font-size="9" fill="#185FA5" text-anchor="end">Melbourne Central</text>
+      <circle cx="180" cy="158" r="9" fill="#185FA5"/>
+      <text x="180" y="158" font-size="9" font-weight="600" fill="#fff" text-anchor="middle" dominant-baseline="central">6</text>
+      <text x="165" y="151" font-size="9" fill="#185FA5" text-anchor="end">State Library</text>
+      <circle cx="100" cy="295" r="9" fill="#185FA5"/>
+      <text x="100" y="295" font-size="9" font-weight="600" fill="#fff" text-anchor="middle" dominant-baseline="central">7</text>
+      <text x="86" y="287" font-size="9" fill="#185FA5" text-anchor="end">晚餐+Coles</text>
+      <text x="190" y="44" font-size="9" fill="#aaa" font-style="italic">步行 10 min</text>
+      <text x="190" y="89" font-size="9" fill="#aaa" font-style="italic">步行 5 min</text>
+      <text x="190" y="116" font-size="9" fill="#aaa" font-style="italic">電車 10 min</text>
+      <text x="190" y="145" font-size="9" fill="#aaa" font-style="italic">步行 5 min</text>
+      <text x="190" y="207" font-size="9" fill="#aaa" font-style="italic">電車 回 Southbank</text>
+    </svg>
+    </div>
+  </div>
+  <div class="abox">今天從最北出發一路往南：QVM → Fitzroy → Melbourne Central → 圖書館 → 電車回 Southbank 晚餐 → Coles</div>
+  <div class="stops">
+    <div class="tdiv"><div class="tdiv-line"></div><div class="tdiv-label">早上</div><div class="tdiv-line"></div></div>
+    <div class="sc">
+      <div class="sh"><div class="snum" style="background:var(--bbg);color:var(--blue)">1</div><div class="sb"><div class="st">09:00–10:30 市集</div><div class="sname">Queen Victoria Market（QVM）</div><div class="sd">1878 年開業的墨爾本最大露天市集，必逛熟食館和紀念品區，買伴手禮最划算。</div><div class="stags"><span class="t" style="background:var(--abg);color:var(--amber)">週五 6am–3pm</span></div></div><a href="https://maps.google.com/?q=Queen+Victoria+Market,Melbourne+VIC" target="_blank" class="nav-arrow">↗ 地圖</a></div>
+      <div class="trow">🚶 步行 10 分鐘 → Fitzroy Smith Street</div>
+    </div>
+    <div class="sc">
+      <div class="sh"><div class="snum" style="background:var(--bbg);color:var(--blue)">2</div><div class="sb"><div class="st">10:30–11:30 文青逛街</div><div class="sname">Fitzroy — Smith Street 文青街</div><div class="sd">墨爾本最有個性的街區，獨立設計師店、二手衣、咖啡館和塗鴉牆密集。</div><div class="stags"><span class="t" style="background:var(--grbg);color:var(--gray)">免費閒逛</span></div></div><a href="https://maps.google.com/?q=Smith+Street+Fitzroy+Melbourne" target="_blank" class="nav-arrow">↗ 地圖</a></div>
+      <div class="trow">🚶 步行 5 分鐘 → 彩虹小屋</div>
+    </div>
+    <div class="sc">
+      <div class="sh"><div class="snum" style="background:var(--bbg);color:var(--blue)">3</div><div class="sb"><div class="st">11:30–12:00 打卡</div><div class="sname">彩虹小屋 Rainbow House</div><div class="sd">Fitzroy 彩虹外牆打卡地，出發前 Google 確認最新地址，就在 Smith Street 附近，完全順路。</div><div class="stags"><span class="t" style="background:var(--grbg);color:var(--gray)">免費</span><span class="t" style="background:var(--pkbg);color:var(--pink)">出發前確認地址</span></div></div><a href="https://maps.google.com/?q=rainbow+house+fitzroy+melbourne" target="_blank" class="nav-arrow">↗ 地圖</a></div>
+      <div class="trow">🚶 步行 5 分鐘 → Souvlaki Bar</div>
+    </div>
+    <div class="tdiv"><div class="tdiv-line"></div><div class="tdiv-label">午餐</div><div class="tdiv-line"></div></div>
+    <div class="sc">
+      <div class="sh"><div class="snum" style="background:var(--bbg);color:var(--blue)">4</div><div class="sb"><div class="st">12:00–13:00 午餐</div><div class="sname">希臘捲餅 Souvlaki — The Real Greek Souvlaki Bar</div><div class="sd">315 Brunswick St，就在 Fitzroy 逛街區域。Souvlaki（烤肉捲餅）是必吃道地美食，份量超大。週五 11am 開始。</div><div class="stags"><span class="t" style="background:var(--grbg);color:var(--gray)">AUD 15–25</span><span class="t" style="background:var(--abg);color:var(--amber)">週五 11am–2am</span></div></div><a href="https://maps.google.com/?q=The+Real+Greek+Souvlaki+Bar+315+Brunswick+St+Fitzroy" target="_blank" class="nav-arrow">↗ 地圖</a></div>
+      <div class="trow">🚌 搭免費電車往南 → Melbourne Central（約 10 分）</div>
+    </div>
+    <div class="tdiv"><div class="tdiv-line"></div><div class="tdiv-label">下午</div><div class="tdiv-line"></div></div>
+    <div class="sc">
+      <div class="sh"><div class="snum" style="background:var(--bbg);color:var(--blue)">5</div><div class="sb"><div class="st">13:15–15:00 購物</div><div class="sname">Melbourne Central 購物中心</div><div class="sd">Cnr LaTrobe &amp; Swanston。結合購物中心與古蹟「子彈工廠」的複合空間，整點有掛鐘表演！有 UNIQLO、H&amp;M 等品牌。</div><div class="stags"><span class="t" style="background:var(--abg);color:var(--amber)">每天 10am–7pm</span><span class="t" style="background:var(--gbg);color:var(--green)">整點掛鐘表演</span></div></div><a href="https://maps.google.com/?q=Melbourne+Central+Cnr+LaTrobe+Swanston+Melbourne" target="_blank" class="nav-arrow">↗ 地圖</a></div>
+      <div class="trow">🚶 步行 5 分鐘 → State Library</div>
+    </div>
+    <div class="sc">
+      <div class="sh"><div class="snum" style="background:var(--bbg);color:var(--blue)">6</div><div class="sb"><div class="st">15:15–16:30 文化打卡</div><div class="sname">State Library Victoria 州立圖書館</div><div class="sd">328 Swanston St。1854 年建造的八角穹頂閱覽室，免費入場，IG 最熱門打卡，正中央往上拍最美。</div><div class="stags"><span class="t" style="background:var(--grbg);color:var(--gray)">免費</span><span class="t" style="background:var(--abg);color:var(--amber)">每天 10am–6pm</span></div></div><a href="https://maps.google.com/?q=State+Library+Victoria,328+Swanston+St+Melbourne" target="_blank" class="nav-arrow">↗ 地圖</a></div>
+      <div class="trow">🚌 搭免費電車往南回 Southbank（約 15 分）</div>
+    </div>
+    <div class="tdiv"><div class="tdiv-line"></div><div class="tdiv-label">晚餐</div><div class="tdiv-line"></div></div>
+    <div class="sc">
+      <div class="sh"><div class="snum" style="background:var(--bbg);color:var(--blue)">7</div><div class="sb"><div class="st">18:00–19:30 晚餐</div><div class="sname">Southbank 沿河佛系晚餐</div><div class="sd">沿 Yarra 河餐廳很多，佛系選 Nando's 烤雞或 Grill'd 漢堡 AUD 15–20。</div><div class="stags"><span class="t" style="background:var(--grbg);color:var(--gray)">AUD 15–20 佛系</span></div></div><a href="https://maps.google.com/?q=Southgate+Melbourne+Southbank" target="_blank" class="nav-arrow">↗ 地圖</a></div>
+      <div class="trow">🚶 步行 → Coles 超市</div>
+    </div>
+    <div class="tdiv"><div class="tdiv-line"></div><div class="tdiv-label">回飯店前</div><div class="tdiv-line"></div></div>
+    <div class="sc">
+      <div class="sh"><div class="snum" style="background:var(--bbg);color:var(--blue)">8</div><div class="sb"><div class="st">19:30–20:00 超市採購</div><div class="sname">Coles 澳洲大型超市</div><div class="sd">CBD / Southbank 一帶都有分店。採購 Strongbow 蘋果酒、零食、備用藥品，Moon Ice Cream 超市也買得到！</div><div class="stags"><span class="t" style="background:var(--gbg);color:var(--green)">Strongbow 超市最便宜</span><span class="t" style="background:var(--gbg);color:var(--green)">Moon Ice Cream 這裡買</span></div></div><a href="https://maps.google.com/?q=Coles+Melbourne+CBD+Southbank" target="_blank" class="nav-arrow">↗ 地圖</a></div>
+      <div class="trow">🚶 步行回飯店</div>
+    </div>
+    <div class="tdiv"><div class="tdiv-line"></div><div class="tdiv-label">回飯店</div><div class="tdiv-line"></div></div>
+    <div class="sc">
+      <div class="sh"><div class="snum" style="background:var(--abg);color:var(--amber)">H</div><div class="sb"><div class="st">今晚住宿</div><div class="sname">Holiday Inn Express Melbourne Southbank</div><div class="sd">35 City Rd, Southbank VIC 3006　📞 +61-3-75055444</div><div class="stags"><span class="t" style="background:var(--abg);color:var(--amber)">35 City Rd, Southbank</span></div></div><a href="https://maps.google.com/?q=Holiday+Inn+Express+Melbourne+Southbank,35+City+Rd+Southbank+VIC" target="_blank" class="nav-arrow">↗ 地圖</a></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===================== DAY 5/09 ===================== -->
+<div class="panel" id="d3">
+<div class="card" style="padding-bottom:14px">
+  <div class="dhead">
+    <div class="ddate">Day 6 · 2026/05/09 週六</div>
+    <div class="dtitle">Old Melbourne Gaol + Manchester Press + Gossips + 教堂 + Melbourne Museum + Lygon Street + Tiamo 晚餐</div>
+    <div class="dsub">CBD 中東 → Carlton，從老監獄走到義大利街，順路不繞</div>
+    <div class="dpills">
+      <span class="pill" style="background:var(--gbg);color:var(--green)">飯店早餐吃飽再出發</span>
+      <span class="pill" style="background:var(--bbg);color:var(--blue)">電車免費</span>
+    </div>
+  </div>
+  <div class="map-card">
+    <div class="map-title">今日動線示意圖</div>
+    <div class="map-wrap">
+    <svg viewBox="0 0 580 360" width="580" height="360" xmlns="http://www.w3.org/2000/svg" style="display:block">
+      <defs><marker id="a09" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#0F6E56" opacity=".8"/></marker></defs>
+      <line x1="0" y1="50"  x2="580" y2="50"  stroke="#e0ddd8" stroke-width="5"/>
+      <line x1="0" y1="105" x2="580" y2="105" stroke="#e0ddd8" stroke-width="8"/>
+      <line x1="0" y1="160" x2="580" y2="160" stroke="#e0ddd8" stroke-width="6"/>
+      <line x1="0" y1="215" x2="580" y2="215" stroke="#e0ddd8" stroke-width="9"/>
+      <line x1="0" y1="270" x2="580" y2="270" stroke="#e0ddd8" stroke-width="5"/>
+      <line x1="0" y1="320" x2="580" y2="320" stroke="#e0ddd8" stroke-width="5"/>
+      <line x1="150" y1="0" x2="150" y2="360" stroke="#e0ddd8" stroke-width="8"/>
+      <line x1="320" y1="0" x2="320" y2="360" stroke="#e0ddd8" stroke-width="5"/>
+      <line x1="460" y1="0" x2="460" y2="360" stroke="#e0ddd8" stroke-width="5"/>
+      <path d="M0,228 Q200,221 400,225 Q500,228 580,224" stroke="#a8d8f0" stroke-width="8" fill="none" opacity=".6"/>
+      <text x="290" y="243" font-size="9" fill="#7ab8d8" text-anchor="middle">Yarra River</text>
+      <text x="150" y="12" font-size="9" fill="#bbb" text-anchor="middle">Swanston St</text>
+      <text x="320" y="12" font-size="9" fill="#bbb" text-anchor="middle">Russell St</text>
+      <text x="460" y="12" font-size="9" fill="#bbb" text-anchor="middle">Lygon St</text>
+      <text x="6" y="48"  font-size="9" fill="#bbb">La Trobe</text>
+      <text x="6" y="103" font-size="9" fill="#bbb">Bourke</text>
+      <text x="6" y="158" font-size="9" fill="#bbb">Collins</text>
+      <text x="6" y="213" font-size="9" fill="#bbb">Flinders</text>
+      <text x="6" y="268" font-size="9" fill="#bbb">Carlton</text>
+      <text x="6" y="318" font-size="9" fill="#bbb">Lygon St</text>
+      <!-- Hotel -->
+      <circle cx="90" cy="215" r="10" fill="#854F0B"/>
+      <text x="90" y="215" font-size="9" font-weight="600" fill="#fff" text-anchor="middle" dominant-baseline="central">H</text>
+      <text x="76" y="227" font-size="9" fill="#854F0B" text-anchor="end">飯店</text>
+      <!-- Route: H→1(Gaol)→2(Manchester)→3(Cathedral)→4(Museum)→5(Lygon)→6(Tiamo)→H -->
+      <polyline points="90,205 320,50 320,105 460,105 460,270 460,320 90,215" stroke="#0F6E56" stroke-width="2.2" fill="none" stroke-dasharray="5,3" opacity=".75" marker-end="url(#a09)"/>
+      <!-- 1 Old Gaol -->
+      <circle cx="320" cy="50" r="9" fill="#0F6E56"/>
+      <text x="320" y="50" font-size="9" font-weight="600" fill="#fff" text-anchor="middle" dominant-baseline="central">1</text>
+      <text x="335" y="46" font-size="9" fill="#0F6E56">Old Melbourne Gaol</text>
+      <!-- 2 Manchester + Gossips -->
+      <circle cx="320" cy="105" r="9" fill="#0F6E56"/>
+      <text x="320" y="105" font-size="9" font-weight="600" fill="#fff" text-anchor="middle" dominant-baseline="central">2</text>
+      <text x="335" y="99" font-size="9" fill="#0F6E56">Manchester Press</text>
+      <text x="335" y="111" font-size="9" fill="#0F6E56">+ Gossips 午餐</text>
+      <!-- 3 Cathedral -->
+      <circle cx="460" cy="105" r="9" fill="#0F6E56"/>
+      <text x="460" y="105" font-size="9" font-weight="600" fill="#fff" text-anchor="middle" dominant-baseline="central">3</text>
+      <text x="475" y="101" font-size="9" fill="#0F6E56">St Patrick's Cathedral</text>
+      <!-- 4 Museum -->
+      <circle cx="460" cy="270" r="9" fill="#0F6E56"/>
+      <text x="460" y="270" font-size="9" font-weight="600" fill="#fff" text-anchor="middle" dominant-baseline="central">4</text>
+      <text x="475" y="266" font-size="9" fill="#0F6E56">Melbourne Museum</text>
+      <!-- 5 Lygon -->
+      <circle cx="460" cy="295" r="9" fill="#0F6E56"/>
+      <text x="460" y="295" font-size="9" font-weight="600" fill="#fff" text-anchor="middle" dominant-baseline="central">5</text>
+      <text x="475" y="291" font-size="9" fill="#0F6E56">Lygon St + Boost Juice</text>
+      <!-- 6 Tiamo -->
+      <circle cx="460" cy="320" r="9" fill="#0F6E56"/>
+      <text x="460" y="320" font-size="9" font-weight="600" fill="#fff" text-anchor="middle" dominant-baseline="central">6</text>
+      <text x="475" y="316" font-size="9" fill="#0F6E56">Tiamo 晚餐</text>
+      <text x="195" y="42" font-size="9" fill="#aaa" font-style="italic">步行 10 min</text>
+      <text x="330" y="78" font-size="9" fill="#aaa" font-style="italic">步行 8 min</text>
+      <text x="370" y="97" font-size="9" fill="#aaa" font-style="italic">步行 10 min</text>
+      <text x="330" y="190" font-size="9" fill="#aaa" font-style="italic">電車 20 min</text>
+      <text x="470" y="283" font-size="9" fill="#aaa" font-style="italic">步行 10 min</text>
+      <text x="470" y="308" font-size="9" fill="#aaa" font-style="italic">步行 5 min</text>
+    </svg>
+    </div>
+  </div>
+  <div class="abox">今天往東往北：老監獄 → Manchester Press 午餐 → 教堂 → 電車到 Carlton → Museum → Lygon Street → Tiamo 晚餐</div>
+  <div class="stops">
+    <div class="tdiv"><div class="tdiv-line"></div><div class="tdiv-label">早上</div><div class="tdiv-line"></div></div>
+    <div class="sc">
+      <div class="sh"><div class="snum" style="background:var(--tbg);color:var(--teal)">1</div><div class="sb"><div class="st">09:30–11:00 歷史體驗</div><div class="sname">Old Melbourne Gaol 老監獄</div><div class="sd">377 Russell St。1845 年建成。關過大盜 Ned Kelly，有牢房、斷頭台、死亡面具。建議下載免費 Audio App，留 1.5 小時。</div><div class="stags"><span class="t" style="background:var(--grbg);color:var(--gray)">AUD 38/人</span><span class="t" style="background:var(--abg);color:var(--amber)">每天 10am–5pm</span></div></div><a href="https://maps.google.com/?q=Old+Melbourne+Gaol,377+Russell+St+Melbourne" target="_blank" class="nav-arrow">↗ 地圖</a></div>
+      <div class="trow">🚶 步行 8 分鐘 → Manchester Press</div>
+    </div>
+    <div class="tdiv"><div class="tdiv-line"></div><div class="tdiv-label">午餐</div><div class="tdiv-line"></div></div>
+    <div class="sc">
+      <div class="sh"><div class="snum" style="background:var(--tbg);color:var(--teal)">2</div><div class="sb"><div class="st">11:15–12:30 咖啡館午餐</div><div class="sname">Manchester Press 咖啡館</div><div class="sd">8 Rankins Ln，市區彩色小巷。招牌 Bagel 午餐，藏在巷弄超有氛氣。週六 7am–5pm。</div><div class="stags"><span class="t" style="background:var(--grbg);color:var(--gray)">AUD 15–20/人</span><span class="t" style="background:var(--abg);color:var(--amber)">週六 7am–5pm</span></div></div><a href="https://maps.google.com/?q=Manchester+Press+8+Rankins+Lane+Melbourne" target="_blank" class="nav-arrow">↗ 地圖</a></div>
+    </div>
+    <div class="sc">
+      <div class="sh"><div class="snum" style="background:var(--tbg);color:var(--teal)">3</div><div class="sb"><div class="st">12:30–13:00 午餐後甜點</div><div class="sname">Gossips Sweet Lips 甜點飲料</div><div class="sd">Manchester Press 附近，Flinders Lane 巷弄內，午餐後步行幾分鐘順路去買甜點或飲料。</div><div class="stags"><span class="t" style="background:var(--gbg);color:var(--green)">午餐後順路</span></div></div><a href="https://maps.google.com/?q=Gossips+Sweet+Lips+Flinders+Lane+Melbourne" target="_blank" class="nav-arrow">↗ 地圖</a></div>
+      <div class="trow">🚶 步行 10 分鐘往東 → St Patrick's Cathedral</div>
+    </div>
+    <div class="tdiv"><div class="tdiv-line"></div><div class="tdiv-label">下午</div><div class="tdiv-line"></div></div>
+    <div class="sc">
+      <div class="sh"><div class="snum" style="background:var(--tbg);color:var(--teal)">4</div><div class="sb"><div class="st">13:15–14:00 景點</div><div class="sname">St Patrick's Cathedral 聖派翠克大教堂</div><div class="sd">1 Cathedral Pl, East Melbourne。南半球最大哥德式教堂，Jay Chou 和五月天 MV 取景地！彩窗和尖頂必拍，免費。</div><div class="stags"><span class="t" style="background:var(--grbg);color:var(--gray)">免費</span><span class="t" style="background:var(--gbg);color:var(--green)">MV 取景地</span></div></div><a href="https://maps.google.com/?q=St+Patrick+Cathedral,1+Cathedral+Pl+East+Melbourne" target="_blank" class="nav-arrow">↗ 地圖</a></div>
+      <div class="trow">🚌 搭免費電車往北 → Melbourne Museum Carlton（約 20 分）</div>
+    </div>
+    <div class="sc">
+      <div class="sh"><div class="snum" style="background:var(--tbg);color:var(--teal)">5</div><div class="sb"><div class="st">14:30–16:30 博物館</div><div class="sname">Melbourne Museum 墨爾本博物館</div><div class="sd">11 Nicholson St, Carlton。展示自然歷史、原住民文化，互動展覽很多。旁邊的皇家展覽館（Royal Exhibition Building）戶外拍照也很壯觀。</div><div class="stags"><span class="t" style="background:var(--grbg);color:var(--gray)">AUD 15/人（或免費部分）</span><span class="t" style="background:var(--abg);color:var(--amber)">每天 9am–5pm</span></div></div><a href="https://maps.google.com/?q=Melbourne+Museum,11+Nicholson+St+Carlton" target="_blank" class="nav-arrow">↗ 地圖</a></div>
+      <div class="trow">🚶 步行 10 分鐘往南 → Lygon Street</div>
+    </div>
+    <div class="tdiv"><div class="tdiv-line"></div><div class="tdiv-label">晚餐</div><div class="tdiv-line"></div></div>
+    <div class="sc">
+      <div class="sh"><div class="snum" style="background:var(--tbg);color:var(--teal)">6</div><div class="sb"><div class="st">17:00–18:00 義大利街</div><div class="sname">Lygon Street 義大利街</div><div class="sd">墨爾本的義大利文化中心，充滿披薩店和 Gelato 冰淇淋店。邊走邊吃，喝杯 Boost Juice，是 Carlton 區的靈魂街道。</div><div class="stags"><span class="t" style="background:var(--gbg);color:var(--green)">Boost Juice 推薦</span></div></div><a href="https://maps.google.com/?q=Lygon+Street+Carlton+Melbourne" target="_blank" class="nav-arrow">↗ 地圖</a></div>
+      <div class="trow">🚶 步行 5 分鐘 → Tiamo</div>
+    </div>
+    <div class="sc">
+      <div class="sh"><div class="snum" style="background:var(--tbg);color:var(--teal)">7</div><div class="sb"><div class="st">18:00–19:30 晚餐</div><div class="sname">Tiamo — Lygon Street 義式餐廳</div><div class="sd">303 Lygon St, Carlton。墨爾本義大利街最具代表性的老店，份量超大，推薦 Pizza 和 Pasta，邊走邊逛吃 Gelato 收尾。</div><div class="stags"><span class="t" style="background:var(--grbg);color:var(--gray)">AUD 25–40/人</span><span class="t" style="background:var(--rbg);color:var(--red)">建議訂位</span><span class="t" style="background:var(--abg);color:var(--amber)">每天 12pm–9pm</span></div></div><a href="https://maps.google.com/?q=Tiamo+Restaurant+303+Lygon+St+Carlton" target="_blank" class="nav-arrow">↗ 地圖</a></div>
+      <div class="trow">🚌 搭免費電車回 Southbank → 步行回飯店</div>
+    </div>
+    <div class="tdiv"><div class="tdiv-line"></div><div class="tdiv-label">回飯店</div><div class="tdiv-line"></div></div>
+    <div class="sc">
+      <div class="sh"><div class="snum" style="background:var(--abg);color:var(--amber)">H</div><div class="sb"><div class="st">今晚住宿</div><div class="sname">Holiday Inn Express Melbourne Southbank</div><div class="sd">35 City Rd, Southbank VIC 3006　📞 +61-3-75055444</div><div class="stags"><span class="t" style="background:var(--abg);color:var(--amber)">35 City Rd, Southbank</span></div></div><a href="https://maps.google.com/?q=Holiday+Inn+Express+Melbourne+Southbank,35+City+Rd+Southbank+VIC" target="_blank" class="nav-arrow">↗ 地圖</a></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===================== DAY 5/10 ===================== -->
+<div class="panel" id="d4">
+<div class="card" style="padding-bottom:14px">
+  <div class="dhead">
+    <div class="ddate">Day 7 · 2026/05/10 週日</div>
+    <div class="dtitle">South Melbourne Market + NGV 美術館 + Essensorie + Koko Black + Flinders St + Southbank 晚餐 + Crown 噴火秀</div>
+    <div class="dsub">南區 + 飯店周邊，輕鬆一天，Crown 離飯店步行 5 分鐘</div>
+    <div class="dpills">
+      <span class="pill" style="background:var(--grbg);color:var(--gray)">NGV 常設展免費</span>
+      <span class="pill" style="background:var(--gbg);color:var(--green)">飯店早餐吃飽再出發</span>
+    </div>
+  </div>
+  <div class="map-card">
+    <div class="map-title">今日動線示意圖</div>
+    <div class="map-wrap">
+    <svg viewBox="0 0 540 280" width="540" height="280" xmlns="http://www.w3.org/2000/svg" style="display:block">
+      <defs><marker id="a10" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#993556" opacity=".8"/></marker></defs>
+      <line x1="0" y1="60"  x2="540" y2="60"  stroke="#e0ddd8" stroke-width="8"/>
+      <line x1="0" y1="120" x2="540" y2="120" stroke="#e0ddd8" stroke-width="8"/>
+      <line x1="0" y1="178" x2="540" y2="178" stroke="#e0ddd8" stroke-width="6"/>
+      <line x1="0" y1="235" x2="540" y2="235" stroke="#e0ddd8" stroke-width="5"/>
+      <line x1="120" y1="0" x2="120" y2="280" stroke="#e0ddd8" stroke-width="8"/>
+      <line x1="270" y1="0" x2="270" y2="280" stroke="#e0ddd8" stroke-width="5"/>
+      <path d="M0,133 Q180,126 360,130 Q460,133 540,129" stroke="#a8d8f0" stroke-width="8" fill="none" opacity=".6"/>
+      <text x="270" y="147" font-size="9" fill="#7ab8d8" text-anchor="middle">Yarra River</text>
+      <text x="6" y="58"  font-size="9" fill="#bbb">Coventry St</text>
+      <text x="6" y="118" font-size="9" fill="#bbb">Southbank</text>
+      <text x="6" y="176" font-size="9" fill="#bbb">Flinders St</text>
+      <text x="6" y="233" font-size="9" fill="#bbb">Collins St</text>
+      <text x="120" y="12" font-size="9" fill="#bbb" text-anchor="middle">City Rd</text>
+      <text x="270" y="12" font-size="9" fill="#bbb" text-anchor="middle">St Kilda Rd</text>
+      <!-- Hotel -->
+      <circle cx="90" cy="120" r="10" fill="#854F0B"/>
+      <text x="90" y="120" font-size="9" font-weight="600" fill="#fff" text-anchor="middle" dominant-baseline="central">H</text>
+      <text x="76" y="132" font-size="9" fill="#854F0B" text-anchor="end">飯店</text>
+      <!-- Route -->
+      <polyline points="120,60 270,120 270,178 120,178 60,120 90,120" stroke="#993556" stroke-width="2.2" fill="none" stroke-dasharray="5,3" opacity=".75" marker-end="url(#a10)"/>
+      <!-- 1 South Melb Market -->
+      <circle cx="120" cy="60" r="9" fill="#993556"/>
+      <text x="120" y="60" font-size="9" font-weight="600" fill="#fff" text-anchor="middle" dominant-baseline="central">1</text>
+      <text x="135" y="55" font-size="9" fill="#993556">South Melbourne Market</text>
+      <!-- 2 NGV -->
+      <circle cx="270" cy="120" r="9" fill="#993556"/>
+      <text x="270" y="120" font-size="9" font-weight="600" fill="#fff" text-anchor="middle" dominant-baseline="central">2</text>
+      <text x="285" y="115" font-size="9" fill="#993556">NGV 美術館</text>
+      <!-- 3 Essensorie+Koko Black -->
+      <circle cx="270" cy="178" r="9" fill="#993556"/>
+      <text x="270" y="178" font-size="9" font-weight="600" fill="#fff" text-anchor="middle" dominant-baseline="central">3</text>
+      <text x="285" y="172" font-size="9" fill="#993556">Essensorie + Koko Black</text>
+      <!-- 4 Flinders -->
+      <circle cx="120" cy="178" r="9" fill="#993556"/>
+      <text x="120" y="178" font-size="9" font-weight="600" fill="#fff" text-anchor="middle" dominant-baseline="central">4</text>
+      <text x="105" y="170" font-size="9" fill="#993556" text-anchor="end">Flinders St</text>
+      <!-- 5 Dinner -->
+      <circle cx="60" cy="120" r="9" fill="#993556"/>
+      <text x="60" y="120" font-size="9" font-weight="600" fill="#fff" text-anchor="middle" dominant-baseline="central">5</text>
+      <text x="45" y="112" font-size="9" fill="#993556" text-anchor="end">晚餐</text>
+      <!-- 6 Crown -->
+      <circle cx="60" cy="143" r="9" fill="#993556"/>
+      <text x="60" y="143" font-size="9" font-weight="600" fill="#fff" text-anchor="middle" dominant-baseline="central">6</text>
+      <text x="45" y="153" font-size="9" fill="#993556" text-anchor="end">Crown 噴火秀</text>
+      <text x="185" y="113" font-size="9" fill="#aaa" font-style="italic">電車 15 min</text>
+      <text x="280" y="150" font-size="9" fill="#aaa" font-style="italic">步行 15 min</text>
+      <text x="145" y="172" font-size="9" fill="#aaa" font-style="italic">步行 15 min</text>
+      <text x="68" y="108" font-size="9" fill="#aaa" font-style="italic">步行 5 min</text>
+    </svg>
+    </div>
+  </div>
+  <div class="abox">今天南邊輕鬆行：Market → NGV → 購物 → Flinders 打卡 → Southbank 晚餐 → Crown 噴火秀，Crown 離飯店走路 5 分鐘！</div>
+  <div class="stops">
+    <div class="tdiv"><div class="tdiv-line"></div><div class="tdiv-label">早上</div><div class="tdiv-line"></div></div>
+    <div class="sc">
+      <div class="sh"><div class="snum" style="background:var(--pkbg);color:var(--pink)">1</div><div class="sb"><div class="st">09:30–12:30 在地市集 + 午餐</div><div class="sname">South Melbourne Market</div><div class="sd">322-326 Coventry St。在地社區市集，名物 South Melbourne Dim Sim（炸點心）AUD 2–3，生蠔也超新鮮！就在市集裡用餐，吃飽再出發。週日 8am–4pm。</div><div class="stags"><span class="t" style="background:var(--abg);color:var(--amber)">週日 8am–4pm</span><span class="t" style="background:var(--gbg);color:var(--green)">Dim Sim AUD 2–3</span></div></div><a href="https://maps.google.com/?q=South+Melbourne+Market,322+Coventry+St+South+Melbourne" target="_blank" class="nav-arrow">↗ 地圖</a></div>
+      <div class="trow">🚌 搭免費電車往北 → NGV（約 15 分）</div>
+    </div>
+    <div class="tdiv"><div class="tdiv-line"></div><div class="tdiv-label">美術館</div><div class="tdiv-line"></div></div>
+    <div class="sc">
+      <div class="sh"><div class="snum" style="background:var(--pkbg);color:var(--pink)">2</div><div class="sb"><div class="st">12:45–14:45 美術館</div><div class="sname">National Gallery of Victoria（NGV）</div><div class="sd">180 St Kilda Rd。澳洲最大美術館。必看：入口水牆、Great Hall 彩色玻璃天花、Picasso《Weeping Woman》。常設展全免費。</div><div class="stags"><span class="t" style="background:var(--grbg);color:var(--gray)">常設展免費</span><span class="t" style="background:var(--abg);color:var(--amber)">每天 10am–5pm</span><span class="t" style="background:var(--gbg);color:var(--green)">水牆入口先拍</span></div></div><a href="https://maps.google.com/?q=National+Gallery+of+Victoria,180+St+Kilda+Rd+Melbourne" target="_blank" class="nav-arrow">↗ 地圖</a></div>
+      <div class="trow">🚶 步行 15 分鐘往北 → Block Arcade / Collins St</div>
+    </div>
+    <div class="tdiv"><div class="tdiv-line"></div><div class="tdiv-label">午後購物</div><div class="tdiv-line"></div></div>
+    <div class="sc">
+      <div class="sh"><div class="snum" style="background:var(--pkbg);color:var(--pink)">3</div><div class="sb"><div class="st">15:00–16:00 精油香氛</div><div class="sname">Essensorie（Block Arcade）</div><div class="sd">Block Arcade，282 Collins St。精油香氛店，產品非常有質感，是高品質伴手禮首選。</div><div class="stags"><span class="t" style="background:var(--grbg);color:var(--gray)">伴手禮首選</span></div></div><a href="https://maps.google.com/?q=Essensorie+Block+Arcade+282+Collins+St+Melbourne" target="_blank" class="nav-arrow">↗ 地圖</a></div>
+      <div class="trow">🚶 步行 3 分鐘 → Koko Black Royal Arcade</div>
+    </div>
+    <div class="sc">
+      <div class="sh"><div class="snum" style="background:var(--pkbg);color:var(--pink)">4</div><div class="sb"><div class="st">16:00–16:30 手工巧克力</div><div class="sname">Koko Black（Royal Arcade）</div><div class="sd">Royal Arcade 內。澳洲頂級手工巧克力，推薦熱巧克力或買松露巧克力當伴手禮。</div><div class="stags"><span class="t" style="background:var(--grbg);color:var(--gray)">伴手禮推薦</span><span class="t" style="background:var(--abg);color:var(--amber)">週日 9am–6pm</span></div></div><a href="https://maps.google.com/?q=Koko+Black+Royal+Arcade+Melbourne" target="_blank" class="nav-arrow">↗ 地圖</a></div>
+      <div class="trow">🚶 步行 15 分鐘往南 → Flinders Street Station</div>
+    </div>
+    <div class="sc">
+      <div class="sh"><div class="snum" style="background:var(--pkbg);color:var(--pink)">5</div><div class="sb"><div class="st">16:45–17:30 地標打卡</div><div class="sname">Flinders Street Station + Federation Square</div><div class="sd">1905 年黃色圓頂地標，旁邊 Federation Square 有免費展覽。傍晚光線最美，是拍照黃金時段。</div><div class="stags"><span class="t" style="background:var(--grbg);color:var(--gray)">免費</span><span class="t" style="background:var(--pkbg);color:var(--pink)">傍晚拍照最美</span></div></div><a href="https://maps.google.com/?q=Flinders+Street+Station+Melbourne" target="_blank" class="nav-arrow">↗ 地圖</a></div>
+      <div class="trow">🚶 步行 5 分鐘 → Southbank 沿河晚餐</div>
+    </div>
+    <div class="tdiv"><div class="tdiv-line"></div><div class="tdiv-label">晚餐</div><div class="tdiv-line"></div></div>
+    <div class="sc">
+      <div class="sh"><div class="snum" style="background:var(--pkbg);color:var(--pink)">6</div><div class="sb"><div class="st">18:00–19:30 晚餐</div><div class="sname">Southbank 沿河佛系晚餐</div><div class="sd">沿 Yarra 河餐廳很多，佛系選 Nando's 烤雞或 Grill'd 漢堡 AUD 15–20。吃完剛好 9pm Crown 噴火秀。</div><div class="stags"><span class="t" style="background:var(--grbg);color:var(--gray)">AUD 15–20 佛系</span></div></div><a href="https://maps.google.com/?q=Southgate+Melbourne+Southbank" target="_blank" class="nav-arrow">↗ 地圖</a></div>
+      <div class="trow">🚶 步行 5 分鐘 → Crown Casino</div>
+    </div>
+    <div class="tdiv"><div class="tdiv-line"></div><div class="tdiv-label">夜間</div><div class="tdiv-line"></div></div>
+    <div class="sc">
+      <div class="sh"><div class="snum" style="background:var(--pkbg);color:var(--pink)">7</div><div class="sb"><div class="st">20:00–22:00 噴火秀</div><div class="sname">Crown Casino + 免費噴火秀</div><div class="sd">8 Whiteman St，飯店走路 5 分鐘！每晚 9pm 起每整點免費噴火秀。一起喝 Strongbow 看火秀！</div><div class="stags"><span class="t" style="background:var(--grbg);color:var(--gray)">噴火秀免費</span><span class="t" style="background:var(--abg);color:var(--amber)">24 小時開放</span></div></div><a href="https://maps.google.com/?q=Crown+Casino+Melbourne,8+Whiteman+St+Southbank" target="_blank" class="nav-arrow">↗ 地圖</a></div>
+      <div class="trow">🚶 步行 5 分鐘回飯店</div>
+    </div>
+    <div class="tdiv"><div class="tdiv-line"></div><div class="tdiv-label">回飯店</div><div class="tdiv-line"></div></div>
+    <div class="sc">
+      <div class="sh"><div class="snum" style="background:var(--abg);color:var(--amber)">H</div><div class="sb"><div class="st">今晚住宿</div><div class="sname">Holiday Inn Express Melbourne Southbank</div><div class="sd">35 City Rd, Southbank VIC 3006　📞 +61-3-75055444</div><div class="stags"><span class="t" style="background:var(--abg);color:var(--amber)">35 City Rd, Southbank</span></div></div><a href="https://maps.google.com/?q=Holiday+Inn+Express+Melbourne+Southbank,35+City+Rd+Southbank+VIC" target="_blank" class="nav-arrow">↗ 地圖</a></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===================== DAY 5/12 ===================== -->
+<div class="panel" id="d5">
+<div class="card" style="padding-bottom:14px">
+  <div class="dhead">
+    <div class="ddate">Day 9 · 2026/05/12 週二</div>
+    <div class="dtitle">DFO Outlet + Yarra 散步 + Woolworths + SkyBus 回台</div>
+    <div class="dsub">10:00 Check-out 寄行李 · DFO 購物 · Yarra 散步 · Woolworths 補貨 · 17:30 出發機場 · 21:50 CI058 起飛</div>
+    <div class="dpills">
+      <span class="pill" style="background:var(--rbg);color:var(--red)">21:50 起飛！</span>
+      <span class="pill" style="background:var(--gbg);color:var(--green)">飯店早餐吃飽再出發</span>
+    </div>
+  </div>
+  <div class="map-card">
+    <div class="map-title">今日動線示意圖</div>
+    <div class="map-wrap">
+    <svg viewBox="0 0 660 280" width="660" height="280" xmlns="http://www.w3.org/2000/svg" style="display:block">
+      <defs><marker id="a5" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#185FA5" opacity=".7"/></marker></defs>
+      <!-- Streets EW -->
+      <line x1="0" y1="80"  x2="660" y2="80"  stroke="#e0ddd8" stroke-width="8"/>
+      <line x1="0" y1="145" x2="660" y2="145" stroke="#e0ddd8" stroke-width="6"/>
+      <line x1="0" y1="205" x2="660" y2="205" stroke="#e0ddd8" stroke-width="6"/>
+      <!-- Streets NS -->
+      <line x1="130" y1="0" x2="130" y2="280" stroke="#e0ddd8" stroke-width="6"/>
+      <line x1="300" y1="0" x2="300" y2="280" stroke="#e0ddd8" stroke-width="5"/>
+      <line x1="460" y1="0" x2="460" y2="280" stroke="#e0ddd8" stroke-width="5"/>
+      <!-- Yarra River -->
+      <path d="M0,160 Q200,153 400,157 Q520,160 660,156" stroke="#a8d8f0" stroke-width="10" fill="none" opacity=".6"/>
+      <text x="330" y="175" font-size="9" fill="#7ab8d8" text-anchor="middle">Yarra River</text>
+      <!-- Labels -->
+      <text x="6"   y="78"  font-size="9" fill="#bbb">City Rd</text>
+      <text x="6"   y="143" font-size="9" fill="#bbb">Coventry St</text>
+      <text x="6"   y="203" font-size="9" fill="#bbb">Whiteman St</text>
+      <text x="130" y="12"  font-size="9" fill="#bbb" text-anchor="middle">Swanston St</text>
+      <text x="300" y="12"  font-size="9" fill="#bbb" text-anchor="middle">City Rd</text>
+      <text x="460" y="12"  font-size="9" fill="#bbb" text-anchor="middle">Spencer St</text>
+      <!-- Hotel -->
+      <circle cx="130" cy="80" r="10" fill="#854F0B"/>
+      <text x="130" y="80" font-size="9" font-weight="600" fill="#fff" text-anchor="middle" dominant-baseline="central">H</text>
+      <text x="115" y="70" font-size="9" fill="#854F0B" text-anchor="end">飯店</text>
+      <!-- Route: Hotel→1DFO(south)→2Yarra walk→3Woolworths→4Hotel(取行李)→5Southern Cross→Airport -->
+      <polyline points="130,70 300,205 130,145 130,80" stroke="#185FA5" stroke-width="2.2" fill="none" stroke-dasharray="5,3" opacity=".75"/>
+      <polyline points="130,80 460,80" stroke="#185FA5" stroke-width="2.2" fill="none" stroke-dasharray="5,3" opacity=".75" marker-end="url(#a5)"/>
+      <!-- Airport -->
+      <rect x="490" y="22" width="90" height="34" rx="5" fill="#f0ede8" stroke="#ddd"/>
+      <text x="535" y="41" font-size="9" fill="#888" text-anchor="middle">墨爾本機場</text>
+      <text x="535" y="52" font-size="8" fill="#bbb" text-anchor="middle">Terminal 2</text>
+      <line x1="460" y1="72" x2="492" y2="56" stroke="#185FA5" stroke-width="1.5" stroke-dasharray="4,3" opacity=".6" marker-end="url(#a5)"/>
+      <!-- 1 DFO -->
+      <circle cx="300" cy="205" r="9" fill="#854F0B"/>
+      <text x="300" y="205" font-size="9" font-weight="600" fill="#fff" text-anchor="middle" dominant-baseline="central">1</text>
+      <text x="315" y="200" font-size="9" fill="#854F0B">DFO South Wharf</text>
+      <!-- 2 Yarra 散步 (on the river) -->
+      <circle cx="130" cy="145" r="9" fill="#3B6D11"/>
+      <text x="130" y="145" font-size="9" font-weight="600" fill="#fff" text-anchor="middle" dominant-baseline="central">2</text>
+      <text x="115" y="137" font-size="9" fill="#3B6D11" text-anchor="end">Yarra 沿河散步</text>
+      <!-- 3 Woolworths -->
+      <circle cx="130" cy="110" r="9" fill="#3B6D11"/>
+      <text x="130" y="110" font-size="9" font-weight="600" fill="#fff" text-anchor="middle" dominant-baseline="central">3</text>
+      <text x="115" y="102" font-size="9" fill="#3B6D11" text-anchor="end">Woolworths</text>
+      <!-- 4 Hotel take luggage -->
+      <circle cx="160" cy="80" r="9" fill="#185FA5"/>
+      <text x="160" y="80" font-size="9" font-weight="600" fill="#fff" text-anchor="middle" dominant-baseline="central">4</text>
+      <text x="175" y="74" font-size="9" fill="#185FA5">取行李</text>
+      <!-- 5 Southern Cross SkyBus -->
+      <circle cx="460" cy="80" r="9" fill="#185FA5"/>
+      <text x="460" y="80" font-size="9" font-weight="600" fill="#fff" text-anchor="middle" dominant-baseline="central">5</text>
+      <text x="446" y="70" font-size="9" fill="#185FA5" text-anchor="end">Southern Cross</text>
+      <text x="446" y="81" font-size="9" fill="#185FA5" text-anchor="end">搭 SkyBus</text>
+      <!-- Distances -->
+      <text x="205" y="198" font-size="9" fill="#aaa" font-style="italic">步行 15 min</text>
+      <text x="115" y="128" font-size="9" fill="#aaa" font-style="italic">沿河步行</text>
+      <text x="115" y="97"  font-size="9" fill="#aaa" font-style="italic">步行 5 min</text>
+      <text x="270" y="73"  font-size="9" fill="#aaa" font-style="italic">步行 20 min</text>
+      <text x="475" y="53"  font-size="9" fill="#aaa" font-style="italic">SkyBus 30–40 min</text>
+    </svg>
+    </div>
+  </div>
+
+  <div class="wbox">今晚 21:50 起飛！15:00 前結束購物，17:30 搭 SkyBus 或 Uber 出發，目標 19:00 前到機場。</div>
+
+  <div class="stops">
+    <div class="tdiv"><div class="tdiv-line"></div><div class="tdiv-label">早上</div><div class="tdiv-line"></div></div>
+
+    <div class="sc">
+      <div class="sh"><div class="snum" style="background:var(--abg);color:var(--amber)">H</div><div class="sb"><div class="st">10:00 Check-out</div><div class="sname">Holiday Inn Southbank — Check-out 寄放行李</div><div class="sd">辦理 Check-out，行李寄放 Front Desk（免費），輕裝出發。確認護照、退稅收據都在手邊。</div><div class="stags"><span class="t" style="background:var(--rbg);color:var(--red)">GST 退稅收據保留</span></div></div><a href="https://maps.google.com/?q=Holiday+Inn+Express+Melbourne+Southbank,35+City+Rd" target="_blank" class="nav-arrow">↗ 地圖</a></div>
+      <div class="trow">🚌 搭免費電車往南 → South Melbourne Market（約 10 分）</div>
+    </div>
+    <div class="tdiv"><div class="tdiv-line"></div><div class="tdiv-label">購物</div><div class="tdiv-line"></div></div>
+
+    <div class="sc">
+      <div class="sh"><div class="snum" style="background:var(--abg);color:var(--amber)">1</div><div class="sb"><div class="st">10:30–14:00 Outlet 購物</div><div class="sname">DFO South Wharf Outlet</div><div class="sd">20 Convention Centre Pl。UGG、Adidas、Country Road、Levi's、Coach 等品牌折扣。最後購物機會！單店累計 AUD 300 以上可在機場辦 GST 退稅（約退 10%）。</div><div class="stags"><span class="t" style="background:var(--abg);color:var(--amber)">週二 10am–6pm</span><span class="t" style="background:var(--gbg);color:var(--green)">AUD 300 退 GST</span><span class="t" style="background:var(--rbg);color:var(--red)">15:00 前結束</span></div></div><a href="https://maps.google.com/?q=DFO+South+Wharf,20+Convention+Centre+Pl+South+Wharf" target="_blank" class="nav-arrow">↗ 地圖</a></div>
+      <div class="trow">🚶 步行 → Yarra River 沿河散步</div>
+    </div>
+
+    <div class="tdiv"><div class="tdiv-line"></div><div class="tdiv-label">下午</div><div class="tdiv-line"></div></div>
+
+    <div class="sc">
+      <div class="sh"><div class="snum" style="background:var(--gbg);color:var(--green)">3</div><div class="sb"><div class="st">14:00–14:45 沿河散步</div><div class="sname">Yarra River 沿河散步 + 最後拍照</div><div class="sd">DFO 旁邊就是 Yarra River，沿河走回 Southbank，拍墨爾本最後的風景照。Flinders Street Station、Southgate 一帶傍晚光線很美。</div><div class="stags"><span class="t" style="background:var(--grbg);color:var(--gray)">免費</span><span class="t" style="background:var(--gbg);color:var(--green)">最後拍照機會</span></div></div><a href="https://maps.google.com/?q=Yarra+River+Southbank+Melbourne" target="_blank" class="nav-arrow">↗ 地圖</a></div>
+      <div class="trow">🚶 步行 → Woolworths 超市補貨</div>
+    </div>
+
+    <div class="sc">
+      <div class="sh"><div class="snum" style="background:var(--gbg);color:var(--green)">4</div><div class="sb"><div class="st">14:45–15:30 超市最後補貨</div><div class="sname">Woolworths 超市最後採購</div><div class="sd">帶回台灣的零食、保健品、蜂蜜、澳洲護膚品最後補貨機會。注意：肉類製品不能帶回台灣！</div><div class="stags"><span class="t" style="background:var(--gbg);color:var(--green)">蜂蜜、零食、保健品</span><span class="t" style="background:var(--rbg);color:var(--red)">肉類不可帶回台灣</span></div></div><a href="https://maps.google.com/?q=Woolworths+Melbourne+CBD+Southbank" target="_blank" class="nav-arrow">↗ 地圖</a></div>
+      <div class="trow">🚶 步行回飯店取行李</div>
+    </div>
+
+    <div class="tdiv"><div class="tdiv-line"></div><div class="tdiv-label">前往機場</div><div class="tdiv-line"></div></div>
+
+    <div class="sc">
+      <div class="sh"><div class="snum" style="background:var(--bbg);color:var(--blue)">5</div><div class="sb"><div class="st">15:30–16:30 取回行李 + 整理出發</div><div class="sname">Holiday Inn Southbank — 取回行李</div><div class="sd">回 Front Desk 取行李，最後整理打包。確認護照、登機證、退稅收據都在手邊。17:30 準時出發機場。</div><div class="stags"><span class="t" style="background:var(--rbg);color:var(--red)">確認退稅收據</span><span class="t" style="background:var(--rbg);color:var(--red)">17:30 出發</span></div></div><a href="https://maps.google.com/?q=Holiday+Inn+Express+Melbourne+Southbank,35+City+Rd" target="_blank" class="nav-arrow">↗ 地圖</a></div>
+      <div class="trow">🚕 SkyBus（Southern Cross Station）或 Uber → 墨爾本機場（30–40 分）</div>
+    </div>
+
+    <div class="sc">
+      <div class="sh"><div class="snum" style="background:var(--bbg);color:var(--blue)">6</div><div class="sb"><div class="st">16:30–17:30 步行到 Southern Cross</div><div class="sname">Southern Cross Station — 搭 SkyBus 出發</div><div class="sd">搭 SkyBus 直達墨爾本國際機場 T2，全程約 30–40 分鐘，票價 AUD 19–22/人，每 10 分鐘一班。或叫 Uber 直接從飯店出發（約 AUD 50–70 全車，適合行李多的團體）。</div><div class="stags"><span class="t" style="background:var(--gbg);color:var(--green)">SkyBus 每 10 分鐘一班</span><span class="t" style="background:var(--grbg);color:var(--gray)">AUD 19–22/人</span><span class="t" style="background:var(--bbg);color:var(--blue)">Uber 全車約 AUD 50–70</span></div></div><a href="https://maps.google.com/?q=Southern+Cross+Station+Melbourne+SkyBus+Stop" target="_blank" class="nav-arrow">↗ 地圖</a></div>
+      <div class="trow">🚌 SkyBus 直達 → 墨爾本機場 Terminal 2</div>
+    </div>
+
+    <div class="sc">
+      <div class="sh"><div class="snum" style="background:var(--bbg);color:var(--blue)">7</div><div class="sb"><div class="st">18:30–19:00 到機場 → 21:50 起飛 CI058</div><div class="sname">墨爾本國際機場 → 台北桃園（CI058）</div><div class="sd">21:50 起飛，隔天 05:15 抵台。到機場後先辦 TRS 退稅（出境後安檢前），再辦 Check-in 托運行李。手提行李鋰電池放隨身！</div><div class="stags"><span class="t" style="background:var(--rbg);color:var(--red)">起飛前 2 小時到</span><span class="t" style="background:var(--gbg);color:var(--green)">出境後辦 GST 退稅</span><span class="t" style="background:var(--abg);color:var(--amber)">鋰電池放隨身</span></div></div><a href="https://maps.google.com/?q=Melbourne+Airport+Terminal+2" target="_blank" class="nav-arrow">↗ 地圖</a></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="card">
+  <div class="note">點擊地圖 ↗ 直接開啟 Google Maps 導航。電車在維多利亞州 2026/5/31 前全程免費。地圖為示意圖，實際距離請以 Google Maps 為準。Higher Ground 建議提前訂位：highergroundmelbourne.com.au　Tiamo 建議提前訂位：+61 3 9347 5759</div>
+</div>
+</div>
+
+<script>
+function sw(i,b){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('show'));
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));
+  document.getElementById('d'+i).classList.add('show');
+  b.classList.add('on');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function jumpTo(panelId) {
+  var idxMap = {'d2':2,'d3':3,'d4':4,'d5':5};
+  var idx = idxMap[panelId];
+  if(idx === undefined) return;
+  var tabs = document.querySelectorAll('.tab');
+  sw(idx, tabs[idx]);
+}
+</script>
+</body>
+</html>
