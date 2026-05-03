@@ -358,7 +358,7 @@ h1{font-size:24px;font-weight:600;margin-bottom:5px}
 </div>
 
 <!-- ===================== DAY 5/08 ===================== -->
-<div class="panel show" id="d2">
+<div class="panel" id="d2">
 <div class="card" style="padding-bottom:14px">
   <div class="dhead">
     <div class="ddate">Day 5 · 2026/05/08 週五</div>
@@ -848,7 +848,19 @@ function sw(i,b){
   document.getElementById('d'+i).classList.add('show');
   b.classList.add('on');
   window.scrollTo({top:0,behavior:'smooth'});
+  try{localStorage.setItem('mel_tab',i);localStorage.setItem('mel_time',Date.now());}catch(e){}
 }
+(function(){
+  try{
+    var t=parseInt(localStorage.getItem('mel_tab'));
+    var ts=parseInt(localStorage.getItem('mel_time'));
+    var EIGHT_HRS=8*60*60*1000;
+    if(!isNaN(t)&&!isNaN(ts)&&(Date.now()-ts)<EIGHT_HRS&&t>0){
+      var tabs=document.querySelectorAll('.tab');
+      if(tabs[t]) sw(t,tabs[t]);
+    }
+  }catch(e){}
+})();
 
 function jumpTo(panelId) {
   var idxMap = {'d2':2,'d3':3,'d4':4,'d5':5};
